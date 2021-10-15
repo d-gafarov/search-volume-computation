@@ -7,7 +7,7 @@ import reactor.test.StepVerifier;
 
 public class CompletionResponseParserTest {
 
-    private static final String TEST_RESPONSE = "[\"iphone\",[\"iphone 13 pro max case\",\"iphone 13 pro case\"],[{},{},{},{},{},{},{},{},{},{}],[],\"3LD3K4AKBWG1H\"]";
+    private static final String TEST_RESPONSE = "[\"iphone\",[\"iphone 13 pro max case\",\"iphone 13 pro case\"],[{},{},{},{},{},{},{},{},{},{}],[],\"3LD3K4AKBWG1H\"]\n";
     private static final String[] EXPECTED = {
             "iphone 13 pro max case",
             "iphone 13 pro case"
