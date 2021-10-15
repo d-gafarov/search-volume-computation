@@ -1,25 +1,33 @@
 package com.vandelay.industries.searchvolumecomputation.util;
 
-import com.google.common.collect.Sets;
-import org.junit.jupiter.api.Assertions;
+import com.vandelay.industries.searchvolumecomputation.exception.SearchVolumeComputationException;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
-import java.util.stream.Collectors;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 public class CompletionResponseParserTest {
 
     private static final String TEST_RESPONSE = "[\"iphone\",[\"iphone 13 pro max case\",\"iphone 13 pro case\"],[{},{},{},{},{},{},{},{},{},{}],[],\"3LD3K4AKBWG1H\"]";
-    private static final Set<String> EXPECTED = Sets.newHashSet(
+    private static final String[] EXPECTED = {
             "iphone 13 pro max case",
             "iphone 13 pro case"
-    );
+    };
 
     @Test
     public void parseResponse_Successful() {
-        Set<String> parsedKeywords = CompletionResponseParser.parseResponse(TEST_RESPONSE)
-                .toStream()
-                .collect(Collectors.toSet());
-        Assertions.assertEquals(EXPECTED, parsedKeywords);
+        Flux<String> parsedKeywords = CompletionResponseParser.parseResponse(TEST_RESPONSE);
+
+        StepVerifier.create(parsedKeywords)
+                .expectNext(EXPECTED)
+                .verifyComplete();
+    }
+
+    @Test
+    public void parseResponse_Failed() {
+        Flux<String> parsedKeywords = CompletionResponseParser.parseResponse("[\"iphone\",]");
+
+        StepVerifier.create(parsedKeywords)
+                .expectError(SearchVolumeComputationException.class)
+                .verify();
     }
 }
