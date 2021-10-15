@@ -1,19 +1,16 @@
 package com.vandelay.industries.searchvolumecomputation.util;
 
-import com.google.common.collect.Sets;
 import com.vandelay.industries.searchvolumecomputation.exception.SearchVolumeComputationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompletionResponseParser {
-    private static final Pattern RESPONSE_PATTERN = Pattern.compile("\\[.+\",\\[(.+)],\\[\\{.+");
+    private static final Pattern RESPONSE_PATTERN = Pattern.compile("\\[.+\",\\[(.+)],\\[\\{.+\n");
 
     public static Flux<String> parseResponse(String response) {
         Matcher responseMatcher = RESPONSE_PATTERN.matcher(response);
